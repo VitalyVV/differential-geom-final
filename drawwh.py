@@ -15,7 +15,8 @@ def heatmap(value):
 
 def draw(faces, vertices, colorfunc=None):
     # Create the geometry:
-    if colorfunc==None: colorfunc=lambda x:int(x)%10 - 5
+    if colorfunc is None:
+         colorfunc=lambda x:int(x)%10 - 5
     vertexcolors=[heatmap(colorfunc(i)) for  i in  range(len(vertices))]
     faces = [f + [None, [vertexcolors[i] for i in f], None] for f in faces]
     geometry = Geometry(faces=faces,vertices=vertices,colors=vertexcolors)

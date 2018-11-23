@@ -28,8 +28,8 @@ class Mesh:
         return cls(faces, vertices)
 
 
-    def draw(self):
-        drawwh.draw(self.faces, self.coordinates.tolist())
+    def draw(self, heatmap=None):
+        drawwh.draw(self.faces, self.coordinates.tolist(), heatmap)
 
 
 
