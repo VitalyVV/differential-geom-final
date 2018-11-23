@@ -10,14 +10,21 @@ def obj_read(filename):
     faces = [[int(coord.split('/')[0])-1 for coord in l[1:4]] for l in lines if len(l)>3 and l[0]=='f']
     return faces, vertices
 
+
 def heatmap(value):
   return '#{:02x}{:02x}{:02x}'.format(*[int(i*255) for i in colorsys.hls_to_rgb(.3-atan(value)/15, .5, 1)])
+
 
 def draw(faces, vertices, colorfunc=None):
     # Create the geometry:
     if colorfunc is None:
          colorfunc=lambda x:int(x)%10 - 5
-    vertexcolors=[heatmap(colorfunc(i)) for  i in  range(len(vertices))]
+
+    vertexcolors = 0
+    if not callable(colorfunc):
+        vertexcolors=[heatmap(colorfunc[i]) for  i in  range(len(vertices))]
+    else:
+        vertexcolors=[heatmap(colorfunc(i)) for  i in  range(len(vertices))]
     faces = [f + [None, [vertexcolors[i] for i in f], None] for f in faces]
     geometry = Geometry(faces=faces,vertices=vertices,colors=vertexcolors)
     # Calculate normals per face, for nice crisp edges:
