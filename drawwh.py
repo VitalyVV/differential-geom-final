@@ -2,6 +2,7 @@ from pythreejs import *
 import colorsys
 from math import atan
 from IPython.display import display
+import solution
 
 def obj_read(filename):
     with open(filename,'r') as obj:
@@ -48,3 +49,43 @@ def draw(faces, vertices, colorfunc=None):
     renderer = Renderer(camera=camera, background='black', background_opacity=1,
                         scene=scene, controls=[OrbitControls(controlling=camera)])
     display(renderer)
+
+
+if __name__=='__main__':
+    import scipy.sparse.linalg as lin
+    from functools import reduce
+    import numpy as np
+
+    def kernel(x, y, t):
+        integral = 0
+        for v, f in zip(e_values, e_vectors.T):
+            ex = np.exp(t * v)
+            if np.isinf(ex):
+                integral += f[x] * f[y]
+            else:
+                integral += ex * f[x] * f[y]
+        return integral
+
+    def heat_function(x, t, f):
+        integral = 0
+        heat = np.zeros(mesh.n)
+        for y in range(mesh.n):
+            heat[y] = kernel(x, y, t) * f[y]
+
+        return heat
+
+
+    mesh = solution.Mesh.fromobj("oloid64_tri.obj")
+    mesh.draw()
+    mesh.LaplaceOperator()
+    L = mesh.laplace_operator
+    e_values, e_vectors = lin.eigs(L)
+    print(f'eigen values:\n{e_values}')
+    print(f'eigen vectors:\n{e_vectors.shape}')
+
+    f_init = np.ones(mesh.n)
+    x = 0
+    for t in np.arange(1.2, 2, 0.01):
+        print(t)
+        heat = heat_function(x, t, f_init)
+        mesh.draw(heat)
