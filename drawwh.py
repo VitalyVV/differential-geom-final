@@ -12,8 +12,9 @@ def obj_read(filename):
     return faces, vertices
 
 
+
 def heatmap(value):
-  return '#{:02x}{:02x}{:02x}'.format(*[int(i*255) for i in colorsys.hls_to_rgb(.3-atan(value)/15, .5, 1)])
+    return '#{:02x}{:02x}{:02x}'.format(*[int(i*255) for i in colorsys.hls_to_rgb(0.5, .3-atan(value)/15, 1)])
 
 
 def draw(faces, vertices, colorfunc=None):
