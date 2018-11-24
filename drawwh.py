@@ -14,7 +14,10 @@ def obj_read(filename):
 
 
 def heatmap(value):
-    return '#{:02x}{:02x}{:02x}'.format(*[int(i*255) for i in colorsys.hls_to_rgb(0.5, .3-atan(value)/15, 1)])
+    def sigmoid(x):
+        return 1/1+np.exp(x)
+
+    return '#{:02x}{:02x}{:02x}'.format(*[int(i*255) for i in colorsys.hls_to_rgb(np.tanh(value), 0.5, 1)])
 
 
 def draw(faces, vertices, colorfunc=None):

@@ -109,7 +109,7 @@ class Mesh:
 
         for i in vertices:
             for j in self.n_i(i):
-                matr[i,j] = self.cotan(i, j)
+                matr[i,j] = 1
 
                                         # TO REFACTOR
                                         # It is very ad hoc to calculate sum like this
